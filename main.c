@@ -50,6 +50,10 @@ int main(int argc, char **argv) {
             printf("\nRunning on run_thread_pool_server Port: %d\n", port);
             run_thread_pool_server(master_socket);
             break;
+        case 4:
+            printf("\nRunning on run_process_pool Port: %d\n", port);
+            run_process_pool(master_socket);
+            break;
         default:
             break;
     }

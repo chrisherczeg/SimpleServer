@@ -9,6 +9,7 @@
 #include <pthread.h>
 
 #define NUM_THREADS (10)
+#define PROCESS_POOL (3)
 
 void run(int slave_socket);
 void *run_proxy(void *slave_socket);
@@ -71,6 +72,18 @@ void run_thread_pool_server (int master_socket) {
 
     run_pool_proxy((void *)(&master_socket));
     pthread_mutex_destroy(&g_mutex);
+}
+
+void run_process_pool(int master_socket) {
+    for (int i = 0; i < PROCESS_POOL; i++) {
+        int pid = fork();
+        int slave_socket = accept_helper(master_socket);
+        if (pid == 0) {
+            run(slave_socket);
+            exit(0);
+        }
+        close(slave_socket);
+    }
 }
 
 void *run_pool_proxy (void *master_socket) {
