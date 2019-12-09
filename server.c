@@ -25,7 +25,9 @@ int accept_helper(int master_socket) {
     int slave_socket = accept(master_socket, (struct sockaddr *) &addr, &length);
 
     char inet_pres[INET_ADDRSTRLEN];
-    inet_ntop(addr.sin_family, &(addr.sin_addr) , inet_pres, INET_ADDRSTRLEN);
+     if (inet_ntop(addr.sin_family, &(addr.sin_addr) , inet_pres, INET_ADDRSTRLEN)) {
+         printf("Connection recevied from %s\n", inet_pres);
+     }
 
     return slave_socket;
 }
