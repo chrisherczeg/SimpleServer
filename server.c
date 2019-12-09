@@ -83,10 +83,12 @@ void *run_pool_proxy (void *master_socket) {
         pthread_mutex_unlock(&g_mutex);
         run(slave_socket);
     }
+    return NULL;
 }
 void *run_proxy(void *slave_socket) {
     int *slave = (int *)slave_socket;
     run(*slave);
+    return NULL;
 }
 void run(int slave_socket) {
     sleep(5);
