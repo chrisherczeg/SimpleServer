@@ -7,6 +7,7 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include <pthread.h>
+#include <sys/wait.h>
 
 #define NUM_THREADS (10)
 #define PROCESS_POOL (3)
@@ -76,14 +77,15 @@ void run_thread_pool_server (int master_socket) {
 
 void run_process_pool(int master_socket) {
     for (int i = 0; i < PROCESS_POOL; i++) {
-        int pid = fork();
         int slave_socket = accept_helper(master_socket);
+        int pid = fork();
         if (pid == 0) {
             run(slave_socket);
             exit(0);
         }
         close(slave_socket);
     }
+    wait(NULL);
 }
 
 void *run_pool_proxy (void *master_socket) {
